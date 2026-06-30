@@ -1,0 +1,27 @@
+name: cryobednet
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - numpy
+  - pandas
+  - matplotlib
+  - scikit-image
+  - pyyaml
+  - tqdm
+  - rasterio
+  - xarray
+  - rioxarray
+  - geopandas
+  - pytorch
+  - torchvision
+  - pytorch-cuda=12.1
+  - pip:
+      - streamlit
+      - plotly
+      - mlflow
+      - dvc
+      - -e .

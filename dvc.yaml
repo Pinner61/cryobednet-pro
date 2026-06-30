@@ -1,0 +1,24 @@
+stages:
+  mock_data:
+    cmd: python scripts/make_mock_data.py --out data/mock_tiles.npz --n 640 --seed 42
+    outs:
+      - data/mock_tiles.npz
+  train:
+    cmd: python -m cryobednet.train --config configs/mock_cpu.yaml
+    deps:
+      - data/mock_tiles.npz
+      - src/cryobednet
+      - configs/mock_cpu.yaml
+    outs:
+      - outputs/mock_cpu/checkpoint_best.pt
+    metrics:
+      - outputs/mock_cpu/metrics_val.json
+  evaluate:
+    cmd: python -m cryobednet.evaluate --config configs/mock_cpu.yaml --split holdout
+    deps:
+      - outputs/mock_cpu/checkpoint_best.pt
+      - data/mock_tiles.npz
+    metrics:
+      - outputs/mock_cpu/metrics_holdout.json
+    plots:
+      - outputs/mock_cpu/history.csv

@@ -1,0 +1,27 @@
+seed: 42
+run_name: mock_cpu
+data:
+  path: data/mock_tiles.npz
+  scale: 4
+  batch_size: 16
+  num_workers: 0
+split:
+  holdout_region: pine_island
+  val_fraction: 0.15
+model:
+  name: residual_unet
+  in_channels: 4
+  base_channels: 32
+  upscale: 4
+train:
+  epochs: 5
+  lr: 0.0002
+  weight_decay: 0.000001
+  amp: false
+  adversarial: false
+  grad_loss_weight: 0.15
+  device: auto
+output_dir: outputs/mock_cpu
+mlflow:
+  enabled: false
+  experiment: CryoBedNet

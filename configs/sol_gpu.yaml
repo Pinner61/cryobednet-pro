@@ -1,0 +1,30 @@
+seed: 42
+run_name: sol_gpu
+
+data:
+  path: data/mock_tiles.npz
+  scale: 4
+  batch_size: 24
+  num_workers: 8
+split:
+  holdout_region: pine_island
+  val_fraction: 0.15
+model:
+  name: rrdb
+  in_channels: 4
+  base_channels: 64
+  num_blocks: 8
+  upscale: 4
+train:
+  epochs: 100
+  lr: 0.0001
+  weight_decay: 0.000001
+  amp: true
+  adversarial: true
+  adv_weight: 0.0005
+  grad_loss_weight: 0.2
+  device: cuda
+output_dir: outputs/sol_gpu
+mlflow:
+  enabled: true
+  experiment: CryoBedNet
