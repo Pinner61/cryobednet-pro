@@ -1,12 +1,18 @@
-# CryoBedNet
+﻿# CryoBedNet: Antarctic Bed Topography Super-Resolution
 
-**CryoBedNet** is a geospatial deep learning project for Antarctic bed topography super-resolution. It modernizes the DeepBedMap idea into a clean PyTorch/HPC workflow with reproducible experiments, region holdout validation, baseline comparisons, visual diagnostics, and a Streamlit dashboard.
+<p align="center">
+  <img src="assets/images/antarctica_overview.png" alt="Antarctic overview map" width="850">
+</p>
 
-The project is designed to be strong enough for a research portfolio: it links AI, cryosphere science, high-performance computing, and climate-risk visualization.
+**CryoBedNet** is a geospatial deep learning project for Antarctic bed-topography super-resolution. It modernizes the DeepBedMap idea into a clean PyTorch and HPC workflow with reproducible experiments, region holdout validation, baseline comparisons, visual diagnostics, and an interactive Streamlit dashboard.
+
+The project links AI, cryosphere science, high-performance computing, and climate-risk visualization. It is designed as a research-grade portfolio project for showing technical depth across machine learning, geospatial modeling, scientific computing, and sustainability-focused analysis.
 
 ## Why this project matters
 
-Antarctic bed elevation controls ice flow, grounding-zone behavior, subglacial drainage, and model uncertainty in sea-level projections. Low-resolution continent-wide products are useful, but many regions need sharper bed-topography detail. CryoBedNet treats this as a multi-source super-resolution problem: combine a coarse bed map with auxiliary ice-sheet layers and learn a high-resolution reconstruction.
+Antarctic bed elevation influences ice flow, grounding-zone behavior, subglacial drainage, and uncertainty in sea-level projections. Low-resolution continent-wide products are useful, but many regions need sharper bed-topography detail for downstream ice-sheet modeling.
+
+CryoBedNet treats this as a multi-source super-resolution problem: combine a coarse bed-elevation prior with high-resolution auxiliary cryosphere layers and learn a sharper reconstruction of the underlying bed structure.
 
 ## What is included
 
@@ -16,7 +22,7 @@ Antarctic bed elevation controls ice flow, grounding-zone behavior, subglacial d
 - Bicubic interpolation baseline
 - Terrain-aware gradient loss and terrain metrics
 - MLflow-compatible experiment logging
-- DVC-style pipeline file for data and model reproducibility
+- DVC-style pipeline file for reproducible data and model stages
 - SOL/Slurm GPU and CPU scripts
 - Streamlit dashboard for prediction, residual, and transect visualization
 - Technical report, attribution file, data-source guide, and resume bullets
@@ -27,6 +33,7 @@ Antarctic bed elevation controls ice flow, grounding-zone behavior, subglacial d
 ```text
 cryobednet-pro/
 ├── app/                         Streamlit dashboard
+├── assets/images/                README and project figures
 ├── assets/reference/             DeepBedMap reference assets and license
 ├── configs/                      Experiment configs
 ├── docs/                         Technical notes, data sources, attribution
@@ -41,7 +48,38 @@ cryobednet-pro/
 └── README.md
 ```
 
+## Technical architecture
+
+```text
+Low-resolution bed prior
+        │
+        ├── Upsampled bed input
+        │
+High-resolution auxiliary layers
+        │
+        ├── Surface elevation
+        ├── Velocity-like field
+        ├── Accumulation-like field
+        └── Ice mask / terrain context
+        │
+        ▼
+PyTorch super-resolution model
+        │
+        ├── Residual U-Net
+        └── RRDB-style generator
+        │
+        ▼
+High-resolution bed prediction
+        │
+        ├── Region holdout evaluation
+        ├── Bicubic baseline comparison
+        ├── Terrain-gradient metrics
+        └── Streamlit visualization dashboard
+```
+
 ## Quick local run
+
+Create and activate a virtual environment:
 
 ```bash
 python -m venv .venv
@@ -50,28 +88,38 @@ python -m pip install --upgrade pip
 pip install -e .
 ```
 
+On Windows PowerShell:
+
+```powershell
+python -m venv .venv
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip
+pip install -e ".[dash,dev]"
+```
+
 Create mock cryosphere tiles:
 
 ```bash
-python scripts/make_mock_data.py --out data/mock_tiles.npz --n 640 --seed 42
+python scripts/make_mock_data.py --out data/mock_tiles.npz --n 800 --seed 42
 ```
 
 Train a region-holdout model:
 
 ```bash
-python -m cryobednet.train --config configs/mock_cpu.yaml
+python -m cryobednet.train --config configs/local_polished.yaml
 ```
 
 Evaluate against bicubic interpolation:
 
 ```bash
-python -m cryobednet.evaluate --config configs/mock_cpu.yaml --split holdout
+python -m cryobednet.evaluate --config configs/local_polished.yaml --split holdout
 ```
 
 Create dashboard-ready figures:
 
 ```bash
-python scripts/export_figures.py --run outputs/mock_cpu --split holdout
+python scripts/export_figures.py --run outputs/local_polished --split holdout
 ```
 
 Open the dashboard:
@@ -83,7 +131,7 @@ streamlit run app/streamlit_app.py
 Use this file in the app:
 
 ```text
-outputs/mock_cpu/predictions_holdout.npz
+outputs/local_polished/predictions_holdout.npz
 ```
 
 ## SOL workflow
@@ -102,6 +150,13 @@ After the training job finishes:
 
 ```bash
 sbatch slurm/evaluate_cpu.sbatch
+```
+
+Check logs:
+
+```bash
+ls logs
+tail -f logs/cryobednet-train-<JOBID>.out
 ```
 
 ## Real-data upgrade path
@@ -140,13 +195,9 @@ The output includes:
 - train/validation loss curves
 - holdout MAE, RMSE, PSNR, SSIM, slope RMSE
 - bicubic baseline metrics
-- prediction/error maps
+- prediction and error maps
 - residual histograms
 - terrain transects
-
-## Resume bullet
-
-> Built CryoBedNet, a PyTorch and SOL/HPC-based geospatial super-resolution pipeline for Antarctic bed-topography reconstruction, using multi-source raster inputs, region holdout validation, SRGAN-style training, MLflow-ready experiment tracking, and an interactive Streamlit dashboard for glacier-risk visualization.
 
 ## Initial holdout metrics
 
@@ -154,3 +205,19 @@ The output includes:
 |---|---:|---:|---:|---:|---:|
 | CryoBedNet | 0.0280 | 0.0361 | 44.05 | 0.9923 | 0.0701 |
 | Bicubic | 0.1318 | 0.1652 | 30.84 | 0.8018 | 0.3313 |
+
+## Current status
+
+The current version runs end-to-end on synthetic cryosphere-style tiles and includes training, evaluation, figure export, dashboard visualization, and HPC job scripts. The next stage is replacing the mock tensors with real Antarctic raster tiles and running larger experiments on SOL GPU resources.
+
+## Sustainability relevance
+
+CryoBedNet is motivated by the need for sharper subsurface maps in polar regions. Better bed-topography reconstruction can support glacier-flow interpretation, ice-sheet model preparation, and climate-risk visualization for sea-level studies.
+
+## Resume bullet
+
+> Built CryoBedNet, a PyTorch and SOL/HPC-based geospatial super-resolution pipeline for Antarctic bed-topography reconstruction, using multi-source raster inputs, region holdout validation, SRGAN-style training, MLflow-ready experiment tracking, and an interactive Streamlit dashboard for glacier-risk visualization.
+
+## Attribution
+
+This project is an educational and research-oriented reimplementation inspired by DeepBedMap and related Antarctic bed-mapping work. Original reference materials and licensing notes are retained in the repository attribution files.

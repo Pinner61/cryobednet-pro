@@ -1,14 +1,9 @@
-# Attribution
+﻿
+## Image attribution
 
-CryoBedNet is a new implementation inspired by DeepBedMap:
+- `assets/images/antarctica_overview.png`  
+  Used as an Antarctic domain-context figure for the project README and repository presentation. The figure is included for educational, research, and project-documentation purposes. Original upstream project materials and license notes should be retained where applicable.
 
-- W. J. Leong and H. J. Horgan, **DeepBedMap: a deep neural network for resolving the bed topography of Antarctica**, The Cryosphere, 2020.
-- Original repository: `weiji14/deepbedmap`.
+## Project attribution
 
-The file `assets/reference/deepbedmap_architecture_reference.pdf` and the license copy in `assets/reference/DEEPBEDMAP_LICENSE.md` come from the DeepBedMap repository. They are included as reference material only.
-
-This repository does not claim ownership of the original DeepBedMap paper, figures, datasets, or code. The new code in `src/cryobednet/` is a separate PyTorch implementation created for educational and research-portfolio use.
-
-Recommended public wording:
-
-> CryoBedNet is inspired by DeepBedMap and reimplements the core idea in PyTorch with region holdout evaluation, SOL/HPC training, MLflow-ready experiment tracking, and an interactive dashboard.
+The project direction is inspired by prior work on Antarctic bed-elevation super-resolution, including DeepBedMap. This repository modernizes the workflow using PyTorch, region holdout validation, SOL/HPC scripts, reproducible experiment structure, and dashboard-based visualization.
