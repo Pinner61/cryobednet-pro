@@ -148,10 +148,6 @@ The output includes:
 
 > Built CryoBedNet, a PyTorch and SOL/HPC-based geospatial super-resolution pipeline for Antarctic bed-topography reconstruction, using multi-source raster inputs, region holdout validation, SRGAN-style training, MLflow-ready experiment tracking, and an interactive Streamlit dashboard for glacier-risk visualization.
 
-## Attribution
-
-CryoBedNet is a new implementation inspired by DeepBedMap. The reference assets copied from the original repository are kept in `assets/reference/` with the original LGPL license and attribution in `docs/ATTRIBUTION.md`.
-
 ## Initial holdout metrics
 
 | Method | MAE | RMSE | PSNR | SSIM | Slope RMSE |
