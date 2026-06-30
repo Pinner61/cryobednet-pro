@@ -206,6 +206,21 @@ The output includes:
 | CryoBedNet | 0.0280 | 0.0361 | 44.05 | 0.9923 | 0.0701 |
 | Bicubic | 0.1318 | 0.1652 | 30.84 | 0.8018 | 0.3313 |
 
+## Real BedMachine terrain-filtered benchmark
+
+CryoBedNet was evaluated on BedMachine Antarctica V4 using a spatial block holdout. A terrain-filtered benchmark was added to remove flat or low-information tiles and focus evaluation on bed regions with meaningful topographic relief.
+
+<p align="center">
+  <img src="reports/terrain_bedmachine/prediction_panel_holdout.png" alt="Terrain-filtered BedMachine prediction panel" width="850">
+</p>
+
+| Method | MAE | RMSE | PSNR | SSIM | Slope RMSE |
+|---|---:|---:|---:|---:|---:|
+| CryoBedNet | 0.00129 | 0.00284 | 58.18 | 0.9984 | 0.00314 |
+| Bicubic | 0.00697 | 0.01196 | 45.68 | 0.9522 | 0.01205 |
+
+On the terrain-filtered BedMachine holdout set, CryoBedNet reduced MAE by about 81%, RMSE by about 76%, and slope RMSE by about 74% compared with bicubic interpolation.
+
 ## Current status
 
 The current version runs end-to-end on synthetic cryosphere-style tiles and includes training, evaluation, figure export, dashboard visualization, and HPC job scripts. The next stage is replacing the mock tensors with real Antarctic raster tiles and running larger experiments on SOL GPU resources.

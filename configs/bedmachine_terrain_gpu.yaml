@@ -1,0 +1,27 @@
+seed: 42
+run_name: bedmachine_terrain_gpu
+data:
+  path: data/bedmachine_tiles_terrain.npz
+  scale: 4
+  batch_size: 16
+  num_workers: 4
+split:
+  holdout_region: block_2_2
+  val_fraction: 0.15
+model:
+  name: rrdb
+  in_channels: 4
+  base_channels: 48
+  upscale: 4
+train:
+  epochs: 120
+  lr: 0.0002
+  weight_decay: 0.000001
+  amp: true
+  adversarial: false
+  grad_loss_weight: 0.25
+  device: cuda
+output_dir: outputs/bedmachine_terrain_gpu
+mlflow:
+  enabled: false
+  experiment: CryoBedNet
