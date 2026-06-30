@@ -214,10 +214,6 @@ The current version runs end-to-end on synthetic cryosphere-style tiles and incl
 
 CryoBedNet is motivated by the need for sharper subsurface maps in polar regions. Better bed-topography reconstruction can support glacier-flow interpretation, ice-sheet model preparation, and climate-risk visualization for sea-level studies.
 
-## Resume bullet
-
-> Built CryoBedNet, a PyTorch and SOL/HPC-based geospatial super-resolution pipeline for Antarctic bed-topography reconstruction, using multi-source raster inputs, region holdout validation, SRGAN-style training, MLflow-ready experiment tracking, and an interactive Streamlit dashboard for glacier-risk visualization.
-
 ## Attribution
 
-This project is an educational and research-oriented reimplementation inspired by DeepBedMap and related Antarctic bed-mapping work. Original reference materials and licensing notes are retained in the repository attribution files.
+This project is an educational and research-oriented reimplementation inspired by related Antarctic bed-mapping work. Original reference materials and licensing notes are retained in the repository attribution files.
